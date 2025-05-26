@@ -6,6 +6,7 @@ import (
 	"log"
 
 	v1 "github.com/S1riyS/go-whiteboard/api-gateway/internal/api/controller/v1"
+	"github.com/S1riyS/go-whiteboard/api-gateway/internal/config"
 	"github.com/S1riyS/go-whiteboard/api-gateway/pkg/logger"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -19,14 +20,15 @@ const (
 // logLevel is a command-line flag for specifying the log level.
 var logLevel = flag.String("l", "info", "log level")
 
-type App struct {
+type app struct {
+	config     *config.Config
 	httpServer *gin.Engine
 }
 
-func New() *App {
+func New() *app {
 	const mark = "app.New"
 
-	app := &App{}
+	app := &app{}
 	err := app.runInitSteps()
 	if err != nil {
 		logger.Fatal("failed to init deps", mark)
@@ -34,12 +36,10 @@ func New() *App {
 	return app
 }
 
-func (a *App) Run() error {
+func (a *app) Run() error {
 	const mark = "app.Run"
 
-	// TODO: replace with real port from config
-	rawPort := 8080
-	// rawPort := a.provider.Config().App.Port
+	rawPort := a.config.App.Port
 	processedPort := fmt.Sprintf(":%d", rawPort)
 
 	err := a.httpServer.Run(processedPort)
@@ -50,14 +50,14 @@ func (a *App) Run() error {
 	return nil
 }
 
-func (a *App) runInitSteps() error {
+func (a *app) runInitSteps() error {
 	const mark = "app.runInitSteps"
 
 	initSteps := []func() error{
 		a.initEnvironment,
 		a.initLogger,
+		a.initConfig,
 		a.initHttpServer,
-		a.initServiceProvider,
 		a.initValidator,
 		a.initControllers,
 	}
@@ -71,7 +71,7 @@ func (a *App) runInitSteps() error {
 	return nil
 }
 
-func (a *App) initEnvironment() error {
+func (a *app) initEnvironment() error {
 	const mark = "app.initEnvironment"
 
 	err := godotenv.Load(ENV_PATH)
@@ -79,10 +79,11 @@ func (a *App) initEnvironment() error {
 		log.Fatal("error loading .env file", mark, zap.String("path", ENV_PATH))
 		return fmt.Errorf("error loading %v file: %v", ENV_PATH, err)
 	}
+
 	return nil
 }
 
-func (a *App) initLogger() error {
+func (a *app) initLogger() error {
 	const mark = "app.initLogger"
 
 	flag.Parse()                                                 // Parse command-line flags
@@ -92,11 +93,19 @@ func (a *App) initLogger() error {
 	return nil
 }
 
-func (a *App) initHttpServer() error {
+func (a *app) initConfig() error {
+	const mark = "app.initConfig"
+
+	a.config = config.GetConfig()
+
+	logger.Info("Config initialized", mark)
+	return nil
+}
+
+func (a *app) initHttpServer() error {
 	const mark = "app.initHttpServer"
 
 	a.httpServer = gin.Default()
-	logger.Info("HTTP server initialized", mark)
 
 	// // CORS policy
 	// a.httpServer.Use(cors.New(cors.Config{
@@ -114,21 +123,25 @@ func (a *App) initHttpServer() error {
 	// 	recover.New(),            // Recover
 	// )
 
+	logger.Info("HTTP server initialized", mark)
 	return nil
 }
 
-func (a *App) initServiceProvider() error {
-	// a.provider = newServiceProvider()
-	return nil
-}
+func (a *app) initValidator() error {
+	const mark = "app.initValidator"
 
-func (a *App) initValidator() error {
 	// validation.InitValidator()
+
+	logger.Warn("Validator is NOT initialized", mark)
 	return nil
 }
 
-func (a *App) initControllers() error {
+func (a *app) initControllers() error {
+	const mark = "app.initControllers"
+
 	api := a.httpServer.Group("/api")
 	v1.SetupControllers(api)
+
+	logger.Info("Controllers initialized", mark)
 	return nil
 }
