@@ -1,9 +1,13 @@
 package response
 
-import "time"
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
 
 type WhiteboardResponse struct {
-	ID        string    `json:"id"`
+	ID        uuid.UUID `json:"id"`
 	Title     string    `json:"title"`
 	OwnerID   string    `json:"owner_id"`
 	CreatedAt time.Time `json:"created_at"`
@@ -11,6 +15,6 @@ type WhiteboardResponse struct {
 }
 
 type WhiteboardListResponse struct {
-	Whiteboards []WhiteboardResponse `json:"whiteboards"`
 	Count       int                  `json:"count"`
+	Whiteboards []WhiteboardResponse `json:"whiteboards"`
 }
