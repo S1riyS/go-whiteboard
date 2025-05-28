@@ -21,4 +21,22 @@ func (c *WhiteboardController) GetOne(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, gin.H{
 		"message": "success",
 	})
+
+
+func (c *WhiteboardController) Create(ctx *gin.Context) {
+	var req request.CreateWhiteboardRequest
+	_ = req
+
+	ctx.JSON(http.StatusCreated, gin.H{
+		"message": "success",
+	})
+}
+
+func (c *WhiteboardController) Update(ctx *gin.Context) {
+	var req request.UpdateWhiteboardRequest
+	_ = req
+
+	ctx.JSON(http.StatusCreated, gin.H{
+		"message": "success",
+	})
 }
