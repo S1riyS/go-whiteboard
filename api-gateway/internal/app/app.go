@@ -139,8 +139,19 @@ func (a *app) initValidator() error {
 func (a *app) initControllers() error {
 	const mark = "app.initControllers"
 
-	api := a.httpServer.Group("/api")
-	v1.SetupControllers(api)
+	// API
+	apiGroup := a.httpServer.Group("/api")
+	v1Group := apiGroup.Group("/v1")
+
+	// Whiteboard
+	whiteboardGroup := v1Group.Group("/whiteboard")
+	whiteboardController := v1.NewWhiteboardController()
+	{
+		whiteboardGroup.POST("/", whiteboardController.Create)
+		whiteboardGroup.GET("/", whiteboardController.GetOne)
+		whiteboardGroup.PUT("/:id", whiteboardController.Update)
+		whiteboardGroup.DELETE("/:id", whiteboardController.Delete)
+	}
 
 	logger.Info("Controllers initialized", mark)
 	return nil
