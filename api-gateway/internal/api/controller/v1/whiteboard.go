@@ -17,7 +17,7 @@ func NewWhiteboardController() *whiteboardController {
 func (c *whiteboardController) GetOne(ctx *gin.Context) {
 	// TODO: retrieve ID
 
-	// TODO: Implement
+	// TODO: Implement get one
 
 	ctx.JSON(http.StatusCreated, gin.H{
 		"message": "success",
@@ -28,7 +28,7 @@ func (c *whiteboardController) Create(ctx *gin.Context) {
 	var req request.CreateWhiteboardRequest
 	_ = req
 
-	// TODO: Implement
+	// TODO: Implement create
 
 	ctx.JSON(http.StatusCreated, gin.H{
 		"message": "success",
@@ -39,7 +39,9 @@ func (c *whiteboardController) Update(ctx *gin.Context) {
 	var req request.UpdateWhiteboardRequest
 	_ = req
 
-	// TODO: Implement
+	// TODO: retrieve ID
+
+	// TODO: Implement update
 
 	ctx.JSON(http.StatusCreated, gin.H{
 		"message": "success",
@@ -49,7 +51,7 @@ func (c *whiteboardController) Update(ctx *gin.Context) {
 func (c *whiteboardController) Delete(ctx *gin.Context) {
 	// TODO: retrieve ID
 
-	// TODO: Implement
+	// TODO: Implement delete
 
 	ctx.JSON(http.StatusCreated, gin.H{
 		"message": "success",

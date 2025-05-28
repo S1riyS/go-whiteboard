@@ -144,11 +144,11 @@ func (a *app) initControllers() error {
 	v1Group := apiGroup.Group("/v1")
 
 	// Whiteboard
-	whiteboardGroup := v1Group.Group("/whiteboard")
+	whiteboardGroup := v1Group.Group("/whiteboards")
 	whiteboardController := v1.NewWhiteboardController()
 	{
 		whiteboardGroup.POST("/", whiteboardController.Create)
-		whiteboardGroup.GET("/", whiteboardController.GetOne)
+		whiteboardGroup.GET("/:id", whiteboardController.GetOne)
 		whiteboardGroup.PUT("/:id", whiteboardController.Update)
 		whiteboardGroup.DELETE("/:id", whiteboardController.Delete)
 	}
