@@ -1,9 +1,9 @@
 version: "3"
 
 vars:
-  LOCAL_BIN: "{{.TASKFILE_DIR}}/bin"
-  MAIN_FILE: "cmd/service/main.go"
-  LOCAL_CONFIG_PATH: "{{.TASKFILE_DIR}}/configs/local.yaml"
+  LOCAL_BIN: ./bin
+  MAIN_FILE: ./cmd/service/main.go
+  LOCAL_CONFIG_PATH: ./configs/local.yaml
 
 tasks:
   build:
