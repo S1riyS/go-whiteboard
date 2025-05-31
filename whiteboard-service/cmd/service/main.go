@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log/slog"
 	"os"
 	"os/signal"
@@ -20,7 +21,8 @@ func main() {
 	_ = logger
 
 	// Init and run app
-	application := app.New()
+	ctx := context.Background()
+	application := app.New(ctx, logger)
 	application.MustRun()
 
 	// Graceful shutdown
