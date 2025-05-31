@@ -10,7 +10,7 @@ import (
 
 type Config struct {
 	Env  EnvType    `yaml:"env" env-default:"local"`
-	GRPC GRPCConfig `yaml:"grpc"`
+	GRPC GRPCConfig `yaml:"grpc_server"`
 }
 
 type GRPCConfig struct {
