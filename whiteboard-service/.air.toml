@@ -4,7 +4,7 @@ tmp_dir = "tmp"
 
 [build]
 args_bin = []
-bin = "./main -l debug"
+bin = "./main -config=./configs/local.yml"
 cmd = "make build"
 delay = 1000
 exclude_dir = ["assets", "tmp", "vendor", "testdata"]
