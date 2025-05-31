@@ -23,7 +23,7 @@ tasks:
       - "{{.LOCAL_BIN}}/swag fmt"
 
   install-deps:
-    desc: "Install dependencies (not go modules)"
+    desc: "Install binary dependencies"
     cmds:
       - mkdir -p {{.LOCAL_BIN}}
       - GOBIN={{.LOCAL_BIN}} go install github.com/air-verse/air@latest

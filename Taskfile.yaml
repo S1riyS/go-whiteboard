@@ -2,4 +2,4 @@ version: "3"
 
 includes:
   shared: ./shared/Taskfile.yaml
-  whiteboard: ./whiteboard_service/Taskfile.yaml
+  whiteboard: ./whiteboard-service/Taskfile.yaml
