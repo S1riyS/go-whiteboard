@@ -1,0 +1,5 @@
+env: "prod"
+
+grpc_server:
+  port: 44044
+  timeout: 5s
