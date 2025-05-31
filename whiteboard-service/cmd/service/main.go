@@ -18,7 +18,11 @@ func main() {
 
 	// Init logger
 	logger := setupLogger(cfg.Env)
-	_ = logger
+
+	// Print config in debug mode
+	if cfg.Env == config.EnvLocal {
+		logger.Info("Config loaded", slog.Any("config", cfg))
+	}
 
 	// Init and run app
 	ctx := context.Background()
