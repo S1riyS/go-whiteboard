@@ -3,9 +3,9 @@ testdata_dir = "testdata"
 tmp_dir = "tmp"
 
 [build]
-args_bin = []
-bin = "./main -config=./configs/local.yml"
-cmd = "make build"
+args_bin = ["-config=./configs/local.yaml"]
+bin = "./main"
+cmd = "task build"
 delay = 1000
 exclude_dir = ["assets", "tmp", "vendor", "testdata"]
 exclude_file = []
