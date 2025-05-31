@@ -1,0 +1,43 @@
+version: "3"
+
+vars:
+  LOCAL_BIN: "{{.CURDIR}}/bin"
+  MAIN_FILE: "cmd/main.go"
+
+tasks:
+  build:
+    desc: "Build the application"
+    cmds:
+      - go build -o main {{.MAIN_FILE}}
+
+  run:
+    desc: "Run the application"
+    cmds:
+      - go run {{.MAIN_FILE}}
+
+  format:
+    desc: "Format the code"
+    cmds:
+      - go fmt ./...
+      - "{{.LOCAL_BIN}}/swag fmt"
+
+  install-deps:
+    desc: "Install dependencies (not go modules)"
+    cmds:
+      - mkdir -p {{.LOCAL_BIN}}
+      - GOBIN={{.LOCAL_BIN}} go install github.com/air-verse/air@latest
+
+  test:
+    desc: "Run the tests"
+    cmds:
+      - go test ./... -v
+
+  watch:
+    desc: "Run the app in live-reloading mode (dev)"
+    cmds:
+      - "{{.LOCAL_BIN}}/air"
+
+  clean:
+    desc: "Clean the binary"
+    cmds:
+      - rm -f main
