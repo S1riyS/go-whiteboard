@@ -4,17 +4,22 @@ import (
 	"github.com/S1riyS/go-whiteboard/whiteboard-service/internal/app/grpc_server"
 )
 
-type App struct {
+type app struct {
 	grpcServer *grpc_server.GrpcServer
 }
 
-func New() *App {
-	return &App{
+func New() *app {
+	return &app{
 		grpcServer: grpc_server.New(),
 	}
 }
 
-func (a *App) MustRun() {
+func (a *app) MustRun() {
+	// TODO: implement me
+	panic("implement me")
+}
+
+func (a *app) Stop() {
 	// TODO: implement me
 	panic("implement me")
 }

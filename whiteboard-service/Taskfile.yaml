@@ -1,8 +1,9 @@
 version: "3"
 
 vars:
-  LOCAL_BIN: "{{.CURDIR}}/bin"
-  MAIN_FILE: "cmd/main.go"
+  LOCAL_BIN: "{{.TASKFILE_DIR}}/bin"
+  MAIN_FILE: "cmd/service/main.go"
+  LOCAL_CONFIG_PATH: "{{.TASKFILE_DIR}}/configs/local.yaml"
 
 tasks:
   build:
@@ -13,7 +14,7 @@ tasks:
   run:
     desc: "Run the application"
     cmds:
-      - go run {{.MAIN_FILE}}
+      - go run {{.MAIN_FILE}} -config={{.LOCAL_CONFIG_PATH}}
 
   format:
     desc: "Format the code"
