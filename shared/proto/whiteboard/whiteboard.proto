@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package github.com.s1riys.go_whiteboard;
+
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/S1riyS/go-whiteboard/shared/gen/go;whiteboardv1";
+
+service WhiteboardService {
+  rpc CreateWhiteboard(CreateWhiteboardRequest) returns (WhiteboardResponse);
+
+  rpc GetWhiteboard(GetWhiteboardRequest) returns (WhiteboardResponse);
+
+  rpc UpdateWhiteboard(UpdateWhiteboardRequest) returns (WhiteboardResponse);
+
+  rpc DeleteWhiteboard(DeleteWhiteboardRequest) returns (google.protobuf.Empty);
+}
+
+// Models
+message Whiteboard {
+  int64 id = 1;
+  string title = 2;
+  string description = 3;
+}
+
+// Requests
+message CreateWhiteboardRequest {
+  string name = 1;
+  string description = 2;
+}
+
+message GetWhiteboardRequest { int64 id = 1; }
+
+message UpdateWhiteboardRequest {
+  int64 id = 1;
+  string name = 2;
+  string description = 3;
+}
+
+message DeleteWhiteboardRequest { int64 id = 1; }
+
+// Responses
+message WhiteboardResponse { Whiteboard whiteboard = 1; }
