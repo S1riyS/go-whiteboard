@@ -20,7 +20,11 @@ tasks:
     desc: "Format the code"
     cmds:
       - go fmt ./...
-      - "{{.LOCAL_BIN}}/swag fmt"
+
+  tidy:
+    desc: "Run go mod tidy"
+    cmds:
+      - go mod tidy
 
   install-deps:
     desc: "Install binary dependencies"
