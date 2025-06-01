@@ -26,7 +26,7 @@ func main() {
 
 	// Init and run app
 	ctx := context.Background()
-	application := app.New(ctx, logger)
+	application := app.New(ctx, logger, cfg)
 	application.MustRun()
 
 	// Graceful shutdown

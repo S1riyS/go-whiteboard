@@ -4,27 +4,35 @@ import (
 	"context"
 	"log/slog"
 
-	"github.com/S1riyS/go-whiteboard/whiteboard-service/internal/app/grpc_server"
+	grpcServer "github.com/S1riyS/go-whiteboard/whiteboard-service/internal/app/grpc"
+	"github.com/S1riyS/go-whiteboard/whiteboard-service/internal/config"
+	whiteboardRepo "github.com/S1riyS/go-whiteboard/whiteboard-service/internal/repository/whiteboard"
+	whiteboardSvc "github.com/S1riyS/go-whiteboard/whiteboard-service/internal/service/whiteboard"
 )
 
 type app struct {
 	logger     *slog.Logger
-	grpcServer *grpc_server.GrpcServer
+	cfg        *config.Config
+	grpcServer *grpcServer.Server
 }
 
-func New(ctx context.Context, logger *slog.Logger) *app {
+func New(ctx context.Context, logger *slog.Logger, cfg *config.Config) *app {
+	repo := whiteboardRepo.NewRepository()
+	service := whiteboardSvc.NewService(logger, repo)
+
 	return &app{
 		logger:     logger,
-		grpcServer: grpc_server.New(),
+		cfg:        cfg,
+		grpcServer: grpcServer.New(logger, cfg.GRPC, service),
 	}
 }
 
 func (a *app) MustRun() {
-	// TODO: implement me
-	panic("implement me")
+	if err := a.grpcServer.Run(); err != nil {
+		panic(err)
+	}
 }
 
 func (a *app) Stop() {
-	// TODO: implement me
-	panic("implement me")
+	a.grpcServer.Stop()
 }
