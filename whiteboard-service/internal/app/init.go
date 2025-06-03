@@ -8,6 +8,7 @@ import (
 	"github.com/S1riyS/go-whiteboard/whiteboard-service/internal/config"
 	whiteboardRepo "github.com/S1riyS/go-whiteboard/whiteboard-service/internal/repository/whiteboard"
 	whiteboardSvc "github.com/S1riyS/go-whiteboard/whiteboard-service/internal/service/whiteboard"
+	"github.com/S1riyS/go-whiteboard/whiteboard-service/pkg/database/postgresql"
 )
 
 type app struct {
@@ -17,13 +18,14 @@ type app struct {
 }
 
 func New(ctx context.Context, logger *slog.Logger, cfg *config.Config) *app {
-	repo := whiteboardRepo.NewRepository()
-	service := whiteboardSvc.NewService(logger, repo)
+	dbClient := postgresql.MustNewClient(ctx, logger, cfg.Database)
+	repo := whiteboardRepo.NewRepository(logger, dbClient)
+	svc := whiteboardSvc.NewService(logger, repo)
 
 	return &app{
 		logger:     logger,
 		cfg:        cfg,
-		grpcServer: grpcServer.New(logger, cfg.GRPC, service),
+		grpcServer: grpcServer.New(logger, cfg.GRPC, svc),
 	}
 }
 
