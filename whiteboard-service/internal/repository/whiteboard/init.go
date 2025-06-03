@@ -2,8 +2,10 @@ package whiteboard
 
 import (
 	"context"
+	"log/slog"
 
 	"github.com/S1riyS/go-whiteboard/whiteboard-service/internal/entity"
+	"github.com/S1riyS/go-whiteboard/whiteboard-service/pkg/database/postgresql"
 )
 
 type IRepository interface {
@@ -14,12 +16,13 @@ type IRepository interface {
 }
 
 type Repository struct {
-	// TODO: replace with actual DB
-	db []*entity.Whiteboard
+	logger   *slog.Logger
+	dbClient postgresql.Client
 }
 
-func NewRepository() *Repository {
+func NewRepository(logger *slog.Logger, dbClient postgresql.Client) *Repository {
 	return &Repository{
-		db: make([]*entity.Whiteboard, 0),
+		logger:   logger,
+		dbClient: dbClient,
 	}
 }

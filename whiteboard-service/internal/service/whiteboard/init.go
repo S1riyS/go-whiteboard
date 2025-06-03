@@ -1,4 +1,4 @@
-package whiteboard
+package whiteboardService
 
 import (
 	"log/slog"
