@@ -1,11 +1,26 @@
 version: "3"
 
 vars:
-  LOCAL_BIN: ./bin
+  # Dirs
+  LOCAL_BIN: "{{.TASKFILE_DIR}}/bin"
+  LOCAL_MIGRATION: ./migrations
+  # Go files
   MAIN_FILE: ./cmd/service/main.go
-  LOCAL_CONFIG_PATH: ./configs/local.yaml
+  MIGRATE_HELPER_FILE: ./cmd/migration_helper/main.go
+  # Configs
+  CONFIG_LOCAL_PATH: ./configs/local.yaml
+  CONFIG_PROD_PATH: ./configs/prod.yaml
+  # Env
+  ENV_DSN_PATH: ./tmp/.env.dsn
+
+dotenv: ["{{.ENV_DSN_PATH}}"]
 
 tasks:
+  default:
+    silent: true
+    cmds:
+      - task --list --color
+
   build:
     desc: "Build the application"
     cmds:
@@ -14,7 +29,7 @@ tasks:
   run:
     desc: "Run the application"
     cmds:
-      - go run {{.MAIN_FILE}} -config={{.LOCAL_CONFIG_PATH}}
+      - go run {{.MAIN_FILE}} -config-path={{.CONFIG_LOCAL_PATH}}
 
   format:
     desc: "Format the code"
@@ -31,6 +46,7 @@ tasks:
     cmds:
       - mkdir -p {{.LOCAL_BIN}}
       - GOBIN={{.LOCAL_BIN}} go install github.com/air-verse/air@latest
+      - GOBIN={{.LOCAL_BIN}} go install github.com/pressly/goose/v3/cmd/goose@latest
 
   test:
     desc: "Run the tests"
@@ -46,3 +62,37 @@ tasks:
     desc: "Clean the binary"
     cmds:
       - rm -f main
+
+  migration:.generate-dsn:
+    internal: true
+    desc: "Generate .env.dsn file with database DSN (used internally)"
+    cmds:
+      - go run {{.MIGRATE_HELPER_FILE}} -config-path={{.CONFIG_LOCAL_PATH}} -env-dsn-path={{.ENV_DSN_PATH}}
+
+  migration:create:
+    desc: "Create migration (acceptes migration name after --)"
+    deps: [migration:.generate-dsn]
+    vars:
+      NAME: wtf
+    cmds:
+      - mkdir -p {{.LOCAL_MIGRATION}}
+      - "{{.LOCAL_BIN}}/goose -dir {{.LOCAL_MIGRATION}} create '{{.CLI_ARGS}}' sql"
+
+  migration:up:
+    desc: "Migration up"
+    deps: [migration:.generate-dsn]
+    cmds:
+      - echo $ENV_DSN_PATH
+      - "{{.LOCAL_BIN}}/goose -dir {{.LOCAL_MIGRATION}} postgres $DSN up -v"
+
+  migration:down:
+    desc: "Migration down"
+    deps: [migration:.generate-dsn]
+    cmds:
+      - "{{.LOCAL_BIN}}/goose -dir {{.LOCAL_MIGRATION}} postgres $DSN down -v"
+
+  migration:status:
+    desc: "Migration status"
+    deps: [migration:.generate-dsn]
+    cmds:
+      - "{{.LOCAL_BIN}}/goose -dir {{.LOCAL_MIGRATION}} status"
