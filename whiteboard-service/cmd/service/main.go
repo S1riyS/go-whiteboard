@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"log/slog"
 	"os"
 	"os/signal"
@@ -13,15 +14,22 @@ import (
 )
 
 func main() {
+	const mark = "main"
+
+	// Read path to config
+	var configPath string
+	flag.StringVar(&configPath, "config-path", "", "path to config file")
+	flag.Parse()
+
 	// Init config
-	cfg := config.MustLoad()
+	cfg := config.MustLoad(configPath)
 
 	// Init logger
 	logger := setupLogger(cfg.Env)
 
 	// Print config in debug mode
 	if cfg.Env == config.EnvLocal {
-		logger.Info("Config loaded", slog.Any("config", cfg))
+		logger.With(slog.String("mark", mark)).Debug("Config loaded", slog.Any("config", cfg))
 	}
 
 	// Init and run app
@@ -36,7 +44,7 @@ func main() {
 	<-stop
 
 	application.Stop()
-	logger.Info("Gracefully stopped")
+	logger.With(slog.String("mark", mark)).Info("Gracefully stopped")
 }
 
 func setupLogger(env config.EnvType) *slog.Logger {
