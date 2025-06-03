@@ -3,7 +3,7 @@ testdata_dir = "testdata"
 tmp_dir = "tmp"
 
 [build]
-args_bin = ["-config=./configs/local.yaml"]
+args_bin = ["-config-path=./configs/local.yaml"]
 bin = "./main"
 cmd = "task build"
 delay = 1000
