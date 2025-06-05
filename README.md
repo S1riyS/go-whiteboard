@@ -11,27 +11,22 @@
 
 ## 📌 About project
 
-[Go-Whiteboard](https://github.com/S1riyS/go-whiteboard) is a service for creating and editing collaborative whiteboards.
+[Go-Whiteboard](https://github.com/S1riyS/go-whiteboard) is a service for creating and editing collaborative whiteboards in real time!
 
-## 🗺️ Roadmap
-- [ ] Sevices:
-    - [ ] API Gateway
-    - [ ] Auth
-    - [ ] Whiteboard
-    - [ ] Collaboration
-- [ ] Infrastructure:
-    - [ ] CI/CD
-    - [ ] Docker
-    - [ ] Kubernetes (*optional*)
-- [ ] Monitoring:
-    - [ ] Prometheus
-    - [ ] Grafana
-    - [ ] Jaeger
+## 🗺️ Structure
+![Structure diagram](docs/assets/diagram.png)
 
 ## 🛠️ Technology Stack
-### Server
 - [Go](https://go.dev/) - Language
-- [Gin](https://gin-gonic.com/) - Framework
+    - [Gin](https://gin-gonic.com/) - Web framework
+    - [log/slog](https://pkg.go.dev/log/slog) - Logging
+- Communication:
+    - [gRPC](https://grpc.io/) - Interservice communication
+- Persistence:
+    - [Postgres](https://www.postgresql.org/) - SQL Database
+- Tools:
+    - [Taskfile](https://taskfile.dev/) - Task runner / Build tool
+    - [Air](https://github.com/cosmtrek/air) - Live reload
 
 *As the project will evolve, this list will be updated*
 
