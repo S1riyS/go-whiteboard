@@ -1,0 +1,10 @@
+env: "prod"
+
+http_server:
+  port: 8080
+  timeout: 10h
+  allowed_origins: ["http://frontend:3000"]
+
+whiteboard_server:
+  host: "localhost"
+  port: 50051
