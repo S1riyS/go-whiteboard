@@ -1,0 +1,57 @@
+version: "3"
+
+vars:
+  # Dirs
+  LOCAL_BIN: "{{.TASKFILE_DIR}}/bin"
+  # Go files
+  MAIN_FILE: ./cmd/gateway/main.go
+  # Configs
+  CONFIG_LOCAL_PATH: ./configs/local.yaml
+  CONFIG_PROD_PATH: ./configs/prod.yaml
+
+tasks:
+  default:
+    silent: true
+    cmds:
+      - task --list --color
+
+  build:
+    desc: "Build the application"
+    cmds:
+      - go build -o main {{.MAIN_FILE}}
+
+  run:
+    desc: "Run the application"
+    cmds:
+      - go run {{.MAIN_FILE}} -config-path={{.CONFIG_LOCAL_PATH}}
+
+  format:
+    desc: "Format the code"
+    cmds:
+      - go fmt ./...
+
+  tidy:
+    desc: "Run go mod tidy"
+    cmds:
+      - go mod tidy
+
+  install-deps:
+    desc: "Install binary dependencies"
+    cmds:
+      - mkdir -p {{.LOCAL_BIN}}
+      - GOBIN={{.LOCAL_BIN}} go install github.com/air-verse/air@latest
+
+  test:
+    desc: "Run the tests"
+    cmds:
+      - go test ./... -v
+
+  watch:
+    desc: "Run the app in live-reloading mode (dev)"
+    cmds:
+      - "{{.LOCAL_BIN}}/air"
+
+  clean:
+    desc: "Clean the binary"
+    cmds:
+      - rm -f main
