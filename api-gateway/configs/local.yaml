@@ -1,0 +1,10 @@
+env: "local"
+
+http_server:
+  port: 8080
+  timeout: 10h
+  allowed_origins: ["http://localhost:3000"]
+
+whiteboard_client:
+  host: "localhost"
+  port: 50051

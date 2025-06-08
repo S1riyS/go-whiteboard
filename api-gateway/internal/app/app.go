@@ -1,158 +1,55 @@
 package app
 
 import (
-	"flag"
-	"fmt"
-	"log"
+	"context"
 
-	v1 "github.com/S1riyS/go-whiteboard/api-gateway/internal/api/controller/v1"
+	"log/slog"
+
+	httpServer "github.com/S1riyS/go-whiteboard/api-gateway/internal/app/http"
 	"github.com/S1riyS/go-whiteboard/api-gateway/internal/config"
-	"github.com/S1riyS/go-whiteboard/api-gateway/pkg/logger"
-	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
-	"go.uber.org/zap"
+	"github.com/S1riyS/go-whiteboard/api-gateway/pkg/logger/slogext"
 )
 
-const (
-	ENV_PATH = ".env"
-)
-
-// logLevel is a command-line flag for specifying the log level.
-var logLevel = flag.String("l", "info", "log level")
-
-type app struct {
+type App struct {
+	logger     *slog.Logger
 	config     *config.Config
-	httpServer *gin.Engine
+	httpServer *httpServer.Server
 }
 
-func New() *app {
+func New(ctx context.Context, logger *slog.Logger, cfg *config.Config) *App {
 	const mark = "app.New"
 
-	app := &app{}
-	err := app.runInitSteps()
-	if err != nil {
-		logger.Fatal("failed to init deps", mark)
+	app := &App{
+		logger:     logger,
+		config:     cfg,
+		httpServer: httpServer.New(logger, &cfg.HTTP),
 	}
+
+	app.initValidator()
+
 	return app
 }
 
-func (a *app) Run() error {
+func (a *App) MustRun() {
 	const mark = "app.Run"
 
-	rawPort := a.config.App.Port
-	processedPort := fmt.Sprintf(":%d", rawPort)
+	logger := a.logger.With(slog.String("mark", mark))
 
-	err := a.httpServer.Run(processedPort)
-	if err != nil {
-		logger.Fatal("failed to start http server", mark, zap.Int("port", rawPort))
+	if err := a.httpServer.Run(); err != nil {
+		logger.Error("failed to start http server", slog.Int("port", a.config.HTTP.Port), slogext.Err(err))
+		panic(err)
 	}
-
-	return nil
 }
 
-func (a *app) runInitSteps() error {
-	const mark = "app.runInitSteps"
+func (a *App) Stop() {
+	const mark = "app.Stop"
 
-	initSteps := []func() error{
-		a.initEnvironment,
-		a.initLogger,
-		a.initConfig,
-		a.initHttpServer,
-		a.initValidator,
-		a.initControllers,
-	}
-
-	for _, step := range initSteps {
-		if err := step(); err != nil {
-			logger.Fatal("failed to init deps", mark)
-		}
-	}
-
-	return nil
+	a.httpServer.Stop()
 }
 
-func (a *app) initEnvironment() error {
-	const mark = "app.initEnvironment"
-
-	err := godotenv.Load(ENV_PATH)
-	if err != nil {
-		log.Fatal("error loading .env file", mark, zap.String("path", ENV_PATH))
-		return fmt.Errorf("error loading %v file: %v", ENV_PATH, err)
-	}
-
-	return nil
-}
-
-func (a *app) initLogger() error {
-	const mark = "app.initLogger"
-
-	flag.Parse()                                                 // Parse command-line flags
-	logger.Init(logger.GetCore(logger.GetAtomicLevel(logLevel))) // Initialize logger with the specified log level
-
-	logger.Info("Logger initialized", mark)
-	return nil
-}
-
-func (a *app) initConfig() error {
-	const mark = "app.initConfig"
-
-	a.config = config.GetConfig()
-
-	logger.Info("Config initialized", mark)
-	return nil
-}
-
-func (a *app) initHttpServer() error {
-	const mark = "app.initHttpServer"
-
-	a.httpServer = gin.Default()
-
-	// // CORS policy
-	// a.httpServer.Use(cors.New(cors.Config{
-	// 	AllowOrigins:     "*",
-	// 	AllowMethods:     "GET,POST,PUT,DELETE,OPTIONS,PATCH",
-	// 	AllowHeaders:     "Accept,Authorization,Content-Type",
-	// 	AllowCredentials: false, // credentials require explicit origins
-	// 	MaxAge:           300,
-	// }))
-
-	// // Apply middlewares
-	// a.httpServer.Use(
-	// 	middlewares.Logger,       // Logger
-	// 	middlewares.ErrorHandler, // Error handler
-	// 	recover.New(),            // Recover
-	// )
-
-	logger.Info("HTTP server initialized", mark)
-	return nil
-}
-
-func (a *app) initValidator() error {
+func (a *App) initValidator() error {
 	const mark = "app.initValidator"
 
-	// validation.InitValidator()
-
-	logger.Warn("Validator is NOT initialized", mark)
-	return nil
-}
-
-func (a *app) initControllers() error {
-	const mark = "app.initControllers"
-
-	// API
-	apiGroup := a.httpServer.Group("/api")
-	v1Group := apiGroup.Group("/v1")
-
-	// Whiteboard
-	whiteboardGroup := v1Group.Group("/whiteboards")
-	whiteboardController := v1.NewWhiteboardController()
-	{
-		whiteboardGroup.POST("/", whiteboardController.Create)
-		whiteboardGroup.GET("/:id", whiteboardController.GetOne)
-		whiteboardGroup.PUT("/:id", whiteboardController.Update)
-		whiteboardGroup.DELETE("/:id", whiteboardController.Delete)
-	}
-
-	logger.Info("Controllers initialized", mark)
+	a.logger.Warn("Validator is NOT initialized", slog.String("mark", mark))
 	return nil
 }
