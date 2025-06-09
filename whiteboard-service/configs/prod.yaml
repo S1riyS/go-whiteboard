@@ -1,0 +1,12 @@
+env: "prod"
+
+grpc_server:
+  port: 44044
+  timeout: 5s
+
+database:
+  host: "localhost"
+  port: 5432
+  user: "postgres"
+  password: ""
+  dbname: "whiteboard"
