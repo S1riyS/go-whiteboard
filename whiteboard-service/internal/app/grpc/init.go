@@ -23,8 +23,8 @@ type Server struct {
 func New(logger *slog.Logger, cfg config.GRPCConfig, whiteboardService *whiteboardService.Service) *Server {
 	// Create gRPC gRPCServer
 	gRPCServer := grpc.NewServer(grpc.ChainUnaryInterceptor(
-		// TODO: uncomment recovery interceptor
-		// interceptors.Recovery(logger),
+		interceptors.Timeout(logger, cfg.Timeout),
+		interceptors.Recovery(logger),
 		interceptors.Logging(logger),
 	))
 
