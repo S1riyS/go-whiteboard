@@ -1,0 +1,8 @@
+{
+    "protoc": {
+        "options": [
+            // Specify the location of the proto files
+            "--proto_path=${workspaceFolder}/shared/proto"
+        ]
+    }
+}
