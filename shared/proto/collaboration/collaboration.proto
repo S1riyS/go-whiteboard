@@ -3,18 +3,24 @@ syntax = "proto3";
 package github.com.s1riys.go_whiteboard;
 
 import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
 import "collaboration/types.proto";
 
 option go_package = "github.com/S1riyS/go-whiteboard/shared/gen/go;collaborationv1";
 
-service CollaborationService {
+service CollaborationV1 {
   rpc Draw(DrawRequest) returns (DrawResponse);
   rpc Delete(DeleteRequest) returns (google.protobuf.Empty);
 }
 
-message DrawRequest {
-  string whiteboard_id = 4;
+message RequestMetadata {
+  google.protobuf.Timestamp timestamp = 1;
+  string client_id = 2;
+}
 
+message DrawRequest {
+  RequestMetadata metadata = 4;
+  string whiteboard_id = 5;
   oneof element_type {
     ElementLine line = 1;
     ElementCircle circle = 2;
@@ -24,4 +30,8 @@ message DrawRequest {
 
 message DrawResponse { int64 id = 1; }
 
-message DeleteRequest { int64 id = 1; }
+message DeleteRequest {
+  RequestMetadata metadata = 3;
+  int64 whiteboard_id = 1;
+  int64 element_id = 2;
+}

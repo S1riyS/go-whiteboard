@@ -19,122 +19,122 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// CollaborationServiceClient is the client API for CollaborationService service.
+// CollaborationV1Client is the client API for CollaborationV1 service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type CollaborationServiceClient interface {
+type CollaborationV1Client interface {
 	Draw(ctx context.Context, in *DrawRequest, opts ...grpc.CallOption) (*DrawResponse, error)
 	Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*empty.Empty, error)
 }
 
-type collaborationServiceClient struct {
+type collaborationV1Client struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewCollaborationServiceClient(cc grpc.ClientConnInterface) CollaborationServiceClient {
-	return &collaborationServiceClient{cc}
+func NewCollaborationV1Client(cc grpc.ClientConnInterface) CollaborationV1Client {
+	return &collaborationV1Client{cc}
 }
 
-func (c *collaborationServiceClient) Draw(ctx context.Context, in *DrawRequest, opts ...grpc.CallOption) (*DrawResponse, error) {
+func (c *collaborationV1Client) Draw(ctx context.Context, in *DrawRequest, opts ...grpc.CallOption) (*DrawResponse, error) {
 	out := new(DrawResponse)
-	err := c.cc.Invoke(ctx, "/github.com.s1riys.go_whiteboard.CollaborationService/Draw", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/github.com.s1riys.go_whiteboard.CollaborationV1/Draw", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *collaborationServiceClient) Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
+func (c *collaborationV1Client) Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
 	out := new(empty.Empty)
-	err := c.cc.Invoke(ctx, "/github.com.s1riys.go_whiteboard.CollaborationService/Delete", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/github.com.s1riys.go_whiteboard.CollaborationV1/Delete", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// CollaborationServiceServer is the server API for CollaborationService service.
-// All implementations must embed UnimplementedCollaborationServiceServer
+// CollaborationV1Server is the server API for CollaborationV1 service.
+// All implementations must embed UnimplementedCollaborationV1Server
 // for forward compatibility
-type CollaborationServiceServer interface {
+type CollaborationV1Server interface {
 	Draw(context.Context, *DrawRequest) (*DrawResponse, error)
 	Delete(context.Context, *DeleteRequest) (*empty.Empty, error)
-	mustEmbedUnimplementedCollaborationServiceServer()
+	mustEmbedUnimplementedCollaborationV1Server()
 }
 
-// UnimplementedCollaborationServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedCollaborationServiceServer struct {
+// UnimplementedCollaborationV1Server must be embedded to have forward compatible implementations.
+type UnimplementedCollaborationV1Server struct {
 }
 
-func (UnimplementedCollaborationServiceServer) Draw(context.Context, *DrawRequest) (*DrawResponse, error) {
+func (UnimplementedCollaborationV1Server) Draw(context.Context, *DrawRequest) (*DrawResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Draw not implemented")
 }
-func (UnimplementedCollaborationServiceServer) Delete(context.Context, *DeleteRequest) (*empty.Empty, error) {
+func (UnimplementedCollaborationV1Server) Delete(context.Context, *DeleteRequest) (*empty.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
-func (UnimplementedCollaborationServiceServer) mustEmbedUnimplementedCollaborationServiceServer() {}
+func (UnimplementedCollaborationV1Server) mustEmbedUnimplementedCollaborationV1Server() {}
 
-// UnsafeCollaborationServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to CollaborationServiceServer will
+// UnsafeCollaborationV1Server may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to CollaborationV1Server will
 // result in compilation errors.
-type UnsafeCollaborationServiceServer interface {
-	mustEmbedUnimplementedCollaborationServiceServer()
+type UnsafeCollaborationV1Server interface {
+	mustEmbedUnimplementedCollaborationV1Server()
 }
 
-func RegisterCollaborationServiceServer(s grpc.ServiceRegistrar, srv CollaborationServiceServer) {
-	s.RegisterService(&CollaborationService_ServiceDesc, srv)
+func RegisterCollaborationV1Server(s grpc.ServiceRegistrar, srv CollaborationV1Server) {
+	s.RegisterService(&CollaborationV1_ServiceDesc, srv)
 }
 
-func _CollaborationService_Draw_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _CollaborationV1_Draw_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DrawRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CollaborationServiceServer).Draw(ctx, in)
+		return srv.(CollaborationV1Server).Draw(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/github.com.s1riys.go_whiteboard.CollaborationService/Draw",
+		FullMethod: "/github.com.s1riys.go_whiteboard.CollaborationV1/Draw",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CollaborationServiceServer).Draw(ctx, req.(*DrawRequest))
+		return srv.(CollaborationV1Server).Draw(ctx, req.(*DrawRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CollaborationService_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _CollaborationV1_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CollaborationServiceServer).Delete(ctx, in)
+		return srv.(CollaborationV1Server).Delete(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/github.com.s1riys.go_whiteboard.CollaborationService/Delete",
+		FullMethod: "/github.com.s1riys.go_whiteboard.CollaborationV1/Delete",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CollaborationServiceServer).Delete(ctx, req.(*DeleteRequest))
+		return srv.(CollaborationV1Server).Delete(ctx, req.(*DeleteRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// CollaborationService_ServiceDesc is the grpc.ServiceDesc for CollaborationService service.
+// CollaborationV1_ServiceDesc is the grpc.ServiceDesc for CollaborationV1 service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var CollaborationService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "github.com.s1riys.go_whiteboard.CollaborationService",
-	HandlerType: (*CollaborationServiceServer)(nil),
+var CollaborationV1_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "github.com.s1riys.go_whiteboard.CollaborationV1",
+	HandlerType: (*CollaborationV1Server)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "Draw",
-			Handler:    _CollaborationService_Draw_Handler,
+			Handler:    _CollaborationV1_Draw_Handler,
 		},
 		{
 			MethodName: "Delete",
-			Handler:    _CollaborationService_Delete_Handler,
+			Handler:    _CollaborationV1_Delete_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
