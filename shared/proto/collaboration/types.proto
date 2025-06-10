@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package github.com.s1riys.go_whiteboard;
+
+option go_package = "github.com/S1riyS/go-whiteboard/shared/gen/go;collaborationv1";
+
+message Point {
+  double x = 1;
+  double y = 2;
+}
+
+message Color {
+  fixed32 value = 1; // ARGB Color
+}
+
+message ElementStroke {
+  repeated Point points = 1;
+  double width = 2;
+  Color color = 3;
+}
+
+message ElementLine {
+  Point start = 1;
+  Point end = 2;
+  double width = 3;
+  Color color = 4;
+}
+
+message ElementCircle {
+  Point center = 1;
+  double radius = 2;
+  double width = 3;
+  Color color = 4;
+}

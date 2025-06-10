@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package github.com.s1riys.go_whiteboard;
+
+import "google/protobuf/empty.proto";
+import "collaboration/types.proto";
+
+option go_package = "github.com/S1riyS/go-whiteboard/shared/gen/go;collaborationv1";
+
+service CollaborationService {
+  rpc Draw(DrawRequest) returns (DrawResponse);
+  rpc Delete(DeleteRequest) returns (google.protobuf.Empty);
+}
+
+message DrawRequest {
+  string whiteboard_id = 4;
+
+  oneof element_type {
+    ElementLine line = 1;
+    ElementCircle circle = 2;
+    ElementStroke stroke = 3;
+  }
+}
+
+message DrawResponse { int64 id = 1; }
+
+message DeleteRequest { int64 id = 1; }

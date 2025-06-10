@@ -4,6 +4,11 @@ vars:
   LOCAL_BIN: "{{.TASKFILE_DIR}}/bin"
 
 tasks:
+  default:
+    silent: true
+    cmds:
+      - task --list --color
+
   install-deps:
     desc: "Install binary dependencies"
     cmds:
@@ -20,3 +25,19 @@ tasks:
         --go_opt=paths=source_relative
         --go-grpc_out=./gen/go/
         --go-grpc_opt=paths=source_relative
+
+  generate:collaboration:
+    desc: "Generate code from collaboration proto files"
+    cmds:
+      - >
+        protoc -I proto proto/collaboration/*.proto
+        --go_out=./gen/go/
+        --go_opt=paths=source_relative
+        --go-grpc_out=./gen/go/
+        --go-grpc_opt=paths=source_relative
+
+  generate:all:
+    desc: "Generate code from all proto files"
+    cmds:
+      - task: generate:whiteboard
+      - task: generate:collaboration
