@@ -1,4 +1,4 @@
-package grpcserver
+package appgrpc
 
 import (
 	"fmt"
@@ -39,7 +39,7 @@ func New(logger *slog.Logger, cfg config.GRPCConfig, collaborationservice *colla
 
 // Run runs gRPC server.
 func (s *Server) Run() error {
-	const mark = "grpcserver.Run"
+	const mark = "appgrpc.Run"
 
 	localLogger := s.logger.With(slog.String("mark", mark))
 
@@ -59,7 +59,7 @@ func (s *Server) Run() error {
 
 // Stop stops gRPC server.
 func (a *Server) Stop() {
-	const mark = "grpcserver.Stop"
+	const mark = "appgrpc.Stop"
 
 	logger := a.logger.With(slog.String("mark", mark))
 
