@@ -32,6 +32,7 @@ func MustNewClient(ctx context.Context, logger *slog.Logger, cfg config.RedisCon
 			panic(err)
 		}
 
+		logger.Info("Connected to redis")
 		instance = client
 	})
 
