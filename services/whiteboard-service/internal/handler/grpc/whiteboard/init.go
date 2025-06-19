@@ -9,11 +9,11 @@ import (
 )
 
 type Server struct {
-	whiteboardv1.UnimplementedWhiteboardServiceServer
+	whiteboardv1.UnimplementedWhiteboardV1Server
 	logger *slog.Logger
 	svc    *whiteboardService.Service
 }
 
 func Register(logger *slog.Logger, gRPCServer *grpc.Server, svc *whiteboardService.Service) {
-	whiteboardv1.RegisterWhiteboardServiceServer(gRPCServer, &Server{logger: logger, svc: svc})
+	whiteboardv1.RegisterWhiteboardV1Server(gRPCServer, &Server{logger: logger, svc: svc})
 }

@@ -14,10 +14,10 @@ import (
 	"github.com/jackc/pgx/v5/pgconn"
 )
 
-func (r *Repository) GetByID(ctx context.Context, id int) (*entity.Whiteboard, error) {
+func (r *Repository) GetByID(ctx context.Context, id string) (*entity.Whiteboard, error) {
 	const mark = "repository.whiteboard.GetByID"
 
-	logger := r.logger.With(slog.String("mark", mark), slog.Int("id", id))
+	logger := r.logger.With(slog.String("mark", mark), slog.String("id", id))
 
 	queryBuilder := squirrel.
 		Select(IDColumn, TitleColumn, DescriptionColumn).

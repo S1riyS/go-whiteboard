@@ -16,9 +16,9 @@ import (
 func (s *Server) GetWhiteboard(ctx context.Context, req *whiteboardv1.GetWhiteboardRequest) (*whiteboardv1.WhiteboardResponse, error) {
 	const mark = "whiteboard_grpc.Server.GetWhiteboard"
 
-	id := int(req.GetId())
+	id := req.GetId()
 
-	logger := s.logger.With(slog.String("mark", mark), slog.Int("id", id))
+	logger := s.logger.With(slog.String("mark", mark), slog.String("id", id))
 
 	whiteboard, err := s.svc.GetOne(ctx, id)
 	if err != nil {

@@ -1,7 +1,7 @@
 package entity
 
 type Whiteboard struct {
-	ID          int
-	Title        string
+	ID          string
+	Title       string
 	Description string
 }

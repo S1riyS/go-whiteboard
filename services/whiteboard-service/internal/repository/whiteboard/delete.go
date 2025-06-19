@@ -12,7 +12,7 @@ import (
 	"github.com/jackc/pgx/v5/pgconn"
 )
 
-func (r *Repository) Delete(ctx context.Context, id int) error {
+func (r *Repository) Delete(ctx context.Context, id string) error {
 	const mark = "repository.whiteboard.Update"
 
 	logger := r.logger.With(slog.String("mark", mark))
@@ -45,7 +45,7 @@ func (r *Repository) Delete(ctx context.Context, id int) error {
 
 	rowsAffected := res.RowsAffected()
 	if rowsAffected == 0 {
-		logger.Debug("Whiteboard not found", slog.Int("id", id))
+		logger.Debug("Whiteboard not found", slog.String("id", id))
 		return repository.ErrNotFound
 	}
 

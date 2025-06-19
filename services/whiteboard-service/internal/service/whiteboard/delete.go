@@ -8,7 +8,7 @@ import (
 	"github.com/S1riyS/go-whiteboard/whiteboard-service/internal/service"
 )
 
-func (s *Service) Delete(ctx context.Context, id int) error {
+func (s *Service) Delete(ctx context.Context, id string) error {
 	err := s.repo.Delete(ctx, id)
 	if err != nil {
 		if errors.Is(err, repository.ErrNotFound) {

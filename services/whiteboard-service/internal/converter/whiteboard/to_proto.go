@@ -7,7 +7,7 @@ import (
 
 func ToProtoWhiteboard(entity *entity.Whiteboard) *whiteboardv1.Whiteboard {
 	return &whiteboardv1.Whiteboard{
-		Id:          int64(entity.ID),
+		Id:          entity.ID,
 		Title:       entity.Title,
 		Description: entity.Description,
 	}

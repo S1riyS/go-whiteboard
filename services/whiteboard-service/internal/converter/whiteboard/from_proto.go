@@ -14,7 +14,7 @@ func FromProtoCreateRequest(proto *whiteboardv1.CreateWhiteboardRequest) *entity
 
 func FromProtoUpdateRequest(proto *whiteboardv1.UpdateWhiteboardRequest) *entity.Whiteboard {
 	return &entity.Whiteboard{
-		ID:          int(proto.Id),
+		ID:          proto.Id,
 		Title:       proto.Name,
 		Description: proto.Description,
 	}
@@ -22,7 +22,7 @@ func FromProtoUpdateRequest(proto *whiteboardv1.UpdateWhiteboardRequest) *entity
 
 func FromProtoWhiteboard(proto *whiteboardv1.Whiteboard) *entity.Whiteboard {
 	return &entity.Whiteboard{
-		ID:          int(proto.Id),
+		ID:          proto.Id,
 		Title:       proto.Title,
 		Description: proto.Description,
 	}

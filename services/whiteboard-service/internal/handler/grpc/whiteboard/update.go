@@ -19,7 +19,7 @@ func (s *Server) UpdateWhiteboard(ctx context.Context, req *whiteboardv1.UpdateW
 
 	if err != nil {
 		if errors.Is(err, service.ErrNotFound) {
-			s.logger.Debug("Whiteboard not found", slogext.Err(err), slog.Int64("id", req.GetId()))
+			s.logger.Debug("Whiteboard not found", slogext.Err(err), slog.String("id", req.GetId()))
 			return nil, status.Error(codes.NotFound, "Whiteboard not found")
 		}
 

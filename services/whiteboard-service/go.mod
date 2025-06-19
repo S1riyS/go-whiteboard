@@ -6,7 +6,7 @@ toolchain go1.23.9
 
 require (
 	github.com/Masterminds/squirrel v1.5.4
-	github.com/S1riyS/go-whiteboard/shared v0.0.0-20250608190132-ab42f093d199
+	github.com/S1riyS/go-whiteboard/shared v0.0.0-20250619183901-3c18985cc432
 	github.com/fatih/color v1.18.0
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.2
 	github.com/ilyakaznacheev/cleanenv v1.5.0

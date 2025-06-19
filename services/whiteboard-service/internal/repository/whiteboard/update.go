@@ -48,7 +48,7 @@ func (r *Repository) Update(ctx context.Context, whiteboard *entity.Whiteboard) 
 
 	rowsAffected := res.RowsAffected()
 	if rowsAffected == 0 {
-		logger.Debug("Whiteboard not found", slog.Int("id", whiteboard.ID))
+		logger.Debug("Whiteboard not found", slog.String("id", whiteboard.ID))
 		return nil, repository.ErrNotFound
 	}
 

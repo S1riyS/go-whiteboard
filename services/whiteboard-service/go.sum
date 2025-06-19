@@ -5,6 +5,8 @@ github.com/Masterminds/squirrel v1.5.4 h1:uUcX/aBc8O7Fg9kaISIUsHXdKuqehiXAMQTYX8
 github.com/Masterminds/squirrel v1.5.4/go.mod h1:NNaOrjSoIDfDA40n7sr2tPNZRfjzjA400rg+riTZj10=
 github.com/S1riyS/go-whiteboard/shared v0.0.0-20250608190132-ab42f093d199 h1:bpeogIfKGswHORSEaMROrakGkoVpot463LSWSy+fCto=
 github.com/S1riyS/go-whiteboard/shared v0.0.0-20250608190132-ab42f093d199/go.mod h1:yqMX6WbGUYYUGSMoFi14u+i3o9pxmA1ZVrXoCZAnMf8=
+github.com/S1riyS/go-whiteboard/shared v0.0.0-20250619183901-3c18985cc432 h1:Br7oebOVeUsIIbahYK5HEPcTv+VTyvBf5WKJ7wQD73o=
+github.com/S1riyS/go-whiteboard/shared v0.0.0-20250619183901-3c18985cc432/go.mod h1:yqMX6WbGUYYUGSMoFi14u+i3o9pxmA1ZVrXoCZAnMf8=
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=

@@ -14,7 +14,7 @@ import (
 )
 
 // Create creates a new whiteboard, returns the id of the created whiteboard and sets the id to the struct
-func (r *Repository) Create(ctx context.Context, whiteboard *entity.Whiteboard) (int, error) {
+func (r *Repository) Create(ctx context.Context, whiteboard *entity.Whiteboard) (string, error) {
 	const mark = "repository.whiteboard.Create"
 
 	logger := r.logger.With(slog.String("mark", mark))
@@ -29,7 +29,7 @@ func (r *Repository) Create(ctx context.Context, whiteboard *entity.Whiteboard) 
 	query, args, err := queryBuilder.ToSql()
 	if err != nil {
 		logger.Error("Failed to build insert query", slogext.Err(err))
-		return 0, fmt.Errorf("failed to build insert query: %v", err)
+		return "", fmt.Errorf("failed to build insert query: %v", err)
 	}
 
 	logger.Debug("Executing insert query", slog.String("query", query), slog.Any("args", args))
@@ -40,11 +40,11 @@ func (r *Repository) Create(ctx context.Context, whiteboard *entity.Whiteboard) 
 		var pgErr *pgconn.PgError
 		if errors.As(err, &pgErr) {
 			logger.Error("Failed to create whiteboard due to database error", slogext.Err(pgErr))
-			return 0, repository.ErrInternal
+			return "", repository.ErrInternal
 		}
 
 		logger.Error("Failed to create whiteboard due to unexpected error", slogext.Err(err))
-		return 0, fmt.Errorf("failed to create whiteboard: %v", err)
+		return "", fmt.Errorf("failed to create whiteboard: %v", err)
 	}
 
 	return whiteboard.ID, nil

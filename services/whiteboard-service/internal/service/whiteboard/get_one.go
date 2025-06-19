@@ -9,7 +9,7 @@ import (
 	"github.com/S1riyS/go-whiteboard/whiteboard-service/internal/service"
 )
 
-func (s *Service) GetOne(ctx context.Context, id int) (*entity.Whiteboard, error) {
+func (s *Service) GetOne(ctx context.Context, id string) (*entity.Whiteboard, error) {
 	whiteboard, err := s.repo.GetByID(ctx, id)
 	if err != nil {
 		if errors.Is(err, repository.ErrNotFound) {

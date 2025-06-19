@@ -9,16 +9,18 @@ import (
 )
 
 type IRepository interface {
-	Create(ctx context.Context, whiteboard *entity.Whiteboard) (int, error)
-	GetByID(ctx context.Context, id int) (*entity.Whiteboard, error)
+	Create(ctx context.Context, whiteboard *entity.Whiteboard) (string, error)
+	GetByID(ctx context.Context, id string) (*entity.Whiteboard, error)
 	Update(ctx context.Context, whiteboard *entity.Whiteboard) (*entity.Whiteboard, error)
-	Delete(ctx context.Context, id int) error
+	Delete(ctx context.Context, id string) error
 }
 
 type Repository struct {
 	logger   *slog.Logger
 	dbClient postgresql.Client
 }
+
+var _ IRepository = (*Repository)(nil)
 
 func NewRepository(logger *slog.Logger, dbClient postgresql.Client) *Repository {
 	return &Repository{

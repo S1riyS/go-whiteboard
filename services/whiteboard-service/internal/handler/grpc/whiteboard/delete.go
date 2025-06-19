@@ -14,10 +14,10 @@ import (
 )
 
 func (s *Server) DeleteWhiteboard(ctx context.Context, req *whiteboardv1.DeleteWhiteboardRequest) (*emptypb.Empty, error) {
-	err := s.svc.Delete(ctx, int(req.GetId()))
+	err := s.svc.Delete(ctx, req.GetId())
 	if err != nil {
 		if errors.Is(err, service.ErrNotFound) {
-			s.logger.Debug("Whiteboard not found", slogext.Err(err), slog.Int64("id", req.GetId()))
+			s.logger.Debug("Whiteboard not found", slogext.Err(err), slog.String("id", req.GetId()))
 			return nil, status.Error(codes.NotFound, "Whiteboard not found")
 		}
 
