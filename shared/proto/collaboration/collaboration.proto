@@ -28,10 +28,10 @@ message DrawRequest {
   }
 }
 
-message DrawResponse { int64 id = 1; }
+message DrawResponse { string id = 1; }
 
 message DeleteRequest {
   RequestMetadata metadata = 3;
-  int64 whiteboard_id = 1;
-  int64 element_id = 2;
+  string whiteboard_id = 1;
+  string element_id = 2;
 }
