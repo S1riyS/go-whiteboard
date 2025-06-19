@@ -5,8 +5,9 @@ go 1.23.0
 toolchain go1.23.9
 
 require (
-	github.com/S1riyS/go-whiteboard/shared v0.0.0-20250610203702-f416623ec017
+	github.com/S1riyS/go-whiteboard/shared v0.0.0-20250619143621-92823802039e
 	github.com/fatih/color v1.18.0
+	github.com/google/uuid v1.6.0
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.2
 	github.com/ilyakaznacheev/cleanenv v1.5.0
 	github.com/redis/go-redis/v9 v9.10.0
