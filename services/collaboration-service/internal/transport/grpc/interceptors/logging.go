@@ -25,6 +25,10 @@ func Logging(logger *slog.Logger) grpc.UnaryServerInterceptor {
 // This code is simple enough to be copied and not imported.
 func interceptorLogger(l *slog.Logger) logging.Logger {
 	return logging.LoggerFunc(func(ctx context.Context, lvl logging.Level, msg string, fields ...any) {
+		// Adjust level
+		if lvl == logging.LevelInfo {
+			lvl = logging.LevelDebug
+		}
 		l.Log(ctx, slog.Level(lvl), msg, fields...)
 	})
 }
