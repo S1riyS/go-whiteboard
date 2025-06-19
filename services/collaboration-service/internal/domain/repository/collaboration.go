@@ -1,8 +1,12 @@
 package repository
 
-import "github.com/S1riyS/go-whiteboard/collaboration-service/internal/domain/models"
+import (
+	"context"
+
+	"github.com/S1riyS/go-whiteboard/collaboration-service/internal/domain/models"
+)
 
 type ICollaborationRepo interface {
-	Save(drawing *models.Drawing) error
-	Delete(drawingId int, whiteboardId int) error
+	Save(ctx context.Context, drawing *models.Drawing) (int, error)
+	Delete(ctx context.Context, drawingId int) error
 }
