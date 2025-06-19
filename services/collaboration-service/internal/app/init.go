@@ -6,8 +6,8 @@ import (
 
 	appgrpc "github.com/S1riyS/go-whiteboard/collaboration-service/internal/app/grpc"
 	"github.com/S1riyS/go-whiteboard/collaboration-service/internal/config"
-	collaborationdb "github.com/S1riyS/go-whiteboard/collaboration-service/internal/infrastructure/redis/collaboration"
-	collaborationservice "github.com/S1riyS/go-whiteboard/collaboration-service/internal/service/collaboration"
+	"github.com/S1riyS/go-whiteboard/collaboration-service/internal/infrastructure/storage"
+	"github.com/S1riyS/go-whiteboard/collaboration-service/internal/service"
 	"github.com/S1riyS/go-whiteboard/collaboration-service/pkg/cache/redis"
 )
 
@@ -19,13 +19,13 @@ type app struct {
 
 func New(ctx context.Context, logger *slog.Logger, cfg *config.Config) *app {
 	cacheClient := redis.MustNewClient(ctx, logger, cfg.Redis)
-	repo := collaborationdb.NewRepository(logger, cacheClient)
-	svc := collaborationservice.NewService(logger, repo)
+	collaborationStorage := storage.NewCollaborationRedisStorage(logger, cacheClient)
+	collaborationSvc := service.NewCollaborationService(logger, collaborationStorage)
 
 	return &app{
 		logger:     logger,
 		cfg:        cfg,
-		grpcServer: appgrpc.New(logger, cfg.GRPC, svc),
+		grpcServer: appgrpc.New(logger, cfg.GRPC, collaborationSvc),
 	}
 }
 

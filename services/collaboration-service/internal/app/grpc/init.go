@@ -6,8 +6,8 @@ import (
 	"net"
 
 	"github.com/S1riyS/go-whiteboard/collaboration-service/internal/config"
-	collaborationservice "github.com/S1riyS/go-whiteboard/collaboration-service/internal/service/collaboration"
-	collaborationgrpc "github.com/S1riyS/go-whiteboard/collaboration-service/internal/transport/grpc/handler/collaboration"
+	"github.com/S1riyS/go-whiteboard/collaboration-service/internal/service"
+	"github.com/S1riyS/go-whiteboard/collaboration-service/internal/transport/grpc/handler"
 	"github.com/S1riyS/go-whiteboard/collaboration-service/internal/transport/grpc/interceptors"
 	"google.golang.org/grpc"
 )
@@ -20,7 +20,7 @@ type Server struct {
 	gRPCServer *grpc.Server
 }
 
-func New(logger *slog.Logger, cfg config.GRPCConfig, collaborationservice *collaborationservice.Service) *Server {
+func New(logger *slog.Logger, cfg config.GRPCConfig, collaborationservice *service.CollaborationService) *Server {
 	// Create gRPC gRPCServer
 	gRPCServer := grpc.NewServer(grpc.ChainUnaryInterceptor(
 		interceptors.Timeout(logger, cfg.Timeout),
@@ -28,7 +28,7 @@ func New(logger *slog.Logger, cfg config.GRPCConfig, collaborationservice *colla
 		interceptors.Logging(logger),
 	))
 
-	collaborationgrpc.Register(logger, gRPCServer, collaborationservice)
+	handler.RegisterCollaborationHandler(logger, gRPCServer, collaborationservice)
 
 	return &Server{
 		logger:     logger,
