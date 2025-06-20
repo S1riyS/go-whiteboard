@@ -12,17 +12,17 @@ import (
 
 type App struct {
 	logger     *slog.Logger
-	config     *config.Config
+	config     config.Config
 	httpServer *httpServer.Server
 }
 
-func New(ctx context.Context, logger *slog.Logger, cfg *config.Config) *App {
+func New(ctx context.Context, logger *slog.Logger, cfg config.Config) *App {
 	const mark = "app.New"
 
 	app := &App{
 		logger:     logger,
 		config:     cfg,
-		httpServer: httpServer.New(logger, &cfg.HTTP),
+		httpServer: httpServer.New(logger, cfg),
 	}
 
 	app.initValidator()

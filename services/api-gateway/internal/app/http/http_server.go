@@ -7,6 +7,7 @@ import (
 	"time"
 
 	v1 "github.com/S1riyS/go-whiteboard/api-gateway/internal/api/http/controller/v1"
+	clientgrpc "github.com/S1riyS/go-whiteboard/api-gateway/internal/client/grpc"
 	"github.com/S1riyS/go-whiteboard/api-gateway/internal/config"
 	"github.com/S1riyS/go-whiteboard/api-gateway/pkg/logger/slogext"
 	"github.com/gin-contrib/cors"
@@ -14,13 +15,14 @@ import (
 )
 
 type Server struct {
-	logger      *slog.Logger
-	config      *config.HttpConfig
+	logger *slog.Logger
+	config config.Config
+
 	ginInstance *gin.Engine  // Gin engine that runs on `httpSrv`
 	httpSrv     *http.Server // Underlying HTTP server
 }
 
-func New(logger *slog.Logger, config *config.HttpConfig) *Server {
+func New(logger *slog.Logger, config config.Config) *Server {
 	const mark = "httpServer.New"
 
 	server := &Server{
@@ -43,9 +45,9 @@ func (hs *Server) Run() error {
 
 	logger := hs.logger.With(slog.String("mark", mark))
 
-	port := fmt.Sprintf(":%d", hs.config.Port)
+	port := fmt.Sprintf(":%d", hs.config.HTTP.Port)
 	if err := hs.ginInstance.Run(port); err != nil {
-		logger.Error("failed to start http server", slog.Int("port", hs.config.Port), slogext.Err(err))
+		logger.Error("failed to start http server", slog.Int("port", hs.config.HTTP.Port), slogext.Err(err))
 	}
 
 	return nil
@@ -55,7 +57,7 @@ func (hs *Server) Stop() {
 	const mark = "httpServer.Stop"
 
 	logger := hs.logger.With(slog.String("mark", mark))
-	logger.Warn("httpServer.Stop is NOT implemented yet", slog.Int("port", hs.config.Port))
+	logger.Warn("httpServer.Stop is NOT implemented yet", slog.Int("port", hs.config.HTTP.Port))
 }
 
 func (hs *Server) initGin() {
@@ -65,7 +67,7 @@ func (hs *Server) initGin() {
 
 	// CORS configuration
 	hs.ginInstance.Use(cors.New(cors.Config{
-		AllowOrigins:     hs.config.AllowOrigins,
+		AllowOrigins:     hs.config.HTTP.AllowOrigins,
 		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
@@ -89,7 +91,8 @@ func (hs *Server) initControllers() {
 
 	// Whiteboard
 	whiteboardGroup := v1Group.Group("/whiteboards")
-	whiteboardController := v1.NewWhiteboardController()
+	whiteboardClient := clientgrpc.MustNewWhiteboardClient(hs.logger, hs.config.Whiteboard)
+	whiteboardController := v1.NewWhiteboardController(hs.logger, whiteboardClient)
 	{
 		whiteboardGroup.POST("/", whiteboardController.Create)
 		whiteboardGroup.GET("/:id", whiteboardController.GetOne)
