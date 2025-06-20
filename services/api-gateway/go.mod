@@ -5,16 +5,20 @@ go 1.23.0
 toolchain go1.23.9
 
 require (
+	github.com/S1riyS/go-whiteboard/shared v0.0.0-20250619184741-1595860eecb6
 	github.com/fatih/color v1.18.0
 	github.com/gin-contrib/cors v1.7.5
 	github.com/gin-gonic/gin v1.10.0
 	github.com/google/uuid v1.6.0
+	google.golang.org/grpc v1.72.2
 )
 
 require (
 	github.com/BurntSushi/toml v1.2.1 // indirect
+	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/kr/text v0.2.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20250218202821-56aae31c358a // indirect
 	olympos.io/encoding/edn v0.0.0-20201019073823-d3554ca0b0a3 // indirect
 )
 
