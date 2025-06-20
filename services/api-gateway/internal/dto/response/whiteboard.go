@@ -1,17 +1,13 @@
 package response
 
 import (
-	"time"
-
 	"github.com/google/uuid"
 )
 
 type WhiteboardResponse struct {
-	ID        uuid.UUID `json:"id"`
-	Title     string    `json:"title"`
-	OwnerID   string    `json:"owner_id"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	ID          uuid.UUID `json:"id"`
+	Title       string    `json:"title"`
+	Description string    `json:"description"`
 }
 
 type WhiteboardListResponse struct {
