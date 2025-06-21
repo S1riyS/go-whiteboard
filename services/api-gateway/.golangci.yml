@@ -1,0 +1,120 @@
+version: "2"
+run:
+  concurrency: 6
+linters:
+  default: none
+  enable:
+    - asciicheck
+    - bodyclose
+    - dogsled
+    - dupl
+    - durationcheck
+    - errcheck
+    - gocritic
+    - gocyclo
+    - godox
+    - goheader
+    - gomodguard
+    - goprintffuncname
+    - gosec
+    - govet
+    - importas
+    - ineffassign
+    - makezero
+    - nakedret
+    - nolintlint
+    - predeclared
+    - promlinter
+    - revive
+    - staticcheck
+    - unconvert
+    - unparam
+    - unused
+    - whitespace
+  settings:
+    errcheck:
+      check-type-assertions: true
+      check-blank: true
+    gocritic:
+      enabled-checks:
+        - commentedOutCode
+        - nilValReturn
+        - sloppyReassign
+        - weakCond
+        - octalLiteral
+        - appendCombine
+        - equalFold
+        - indexAlloc
+        - rangeExprCopy
+        - rangeValCopy
+        - boolExprSimplify
+        - commentedOutImport
+        - docStub
+        - emptyFallthrough
+        - emptyStringTest
+        - hexLiteral
+        - methodExprCall
+        - stringXbytes
+        - typeAssertChain
+        - unlabelStmt
+        - yodaStyleExpr
+        - builtinShadow
+        - importShadow
+        - initClause
+        - nestingReduce
+        - paramTypeCombine
+        - ptrToRefParam
+        - typeUnparen
+        - unnamedResult
+        - unnecessaryBlock
+    godox:
+      keywords:
+        - BUG
+        - FIXME
+        - HACK
+    gomoddirectives:
+      replace-allow-list:
+        - gitlab.alpinelinux.org/alpine/go
+        - github.com/goccy/go-graphviz
+        - k8s.io/client-go
+        - github.com/anchore/syft
+    gosec:
+      config:
+        G306: "0644"
+    nolintlint:
+      require-explanation: false
+      require-specific: true
+      allow-unused: false
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    rules:
+      - linters:
+          - dupl
+          - gocritic
+          - golint
+        path: fake_.*\.go
+      - linters:
+          - dupl
+        path: .*_test.go
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
