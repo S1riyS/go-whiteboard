@@ -37,8 +37,13 @@ func NewApiError(code int, title string, details string) *ApiError {
 	}
 }
 
+// WriteToContext writes the error to the gin context.
 func (e *ApiError) WriteToContext(ctx *gin.Context) {
-	ctx.Error(e)
+	WriteErrorToContext(ctx, e)
+}
+
+func WriteErrorToContext(ctx *gin.Context, err error) {
+	ctx.Error(err)
 }
 
 func NewInternalError() *ApiError {

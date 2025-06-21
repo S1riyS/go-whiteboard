@@ -7,6 +7,7 @@ import (
 	"time"
 
 	v1 "github.com/S1riyS/go-whiteboard/api-gateway/internal/api/http/controller/v1"
+	middlewares "github.com/S1riyS/go-whiteboard/api-gateway/internal/api/http/middleware"
 	clientgrpc "github.com/S1riyS/go-whiteboard/api-gateway/internal/client/grpc"
 	"github.com/S1riyS/go-whiteboard/api-gateway/internal/config"
 	"github.com/S1riyS/go-whiteboard/api-gateway/pkg/logger/slogext"
@@ -77,8 +78,9 @@ func (hs *Server) initGin() {
 
 	// Middlewares
 	hs.ginInstance.Use(
-		gin.Logger(),
 		gin.Recovery(),
+		middlewares.ErrorHandler(),
+		gin.Logger(),
 	)
 }
 

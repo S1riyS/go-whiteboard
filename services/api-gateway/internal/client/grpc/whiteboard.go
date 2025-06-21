@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log/slog"
 
+	"github.com/S1riyS/go-whiteboard/api-gateway/internal/api"
 	"github.com/S1riyS/go-whiteboard/api-gateway/internal/config"
 	converterwhiteboard "github.com/S1riyS/go-whiteboard/api-gateway/internal/converter/whiteboard"
 	"github.com/S1riyS/go-whiteboard/api-gateway/internal/dto/request"
@@ -13,7 +14,9 @@ import (
 	whiteboardv1 "github.com/S1riyS/go-whiteboard/shared/gen/go/whiteboard"
 	"github.com/google/uuid"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/status"
 )
 
 // WhiteboardClient is a wrapper for whiteboard gRPC client.
@@ -45,7 +48,15 @@ func (wc *WhiteboardClient) CreateWhiteboard(ctx context.Context, req *request.C
 
 	result, err := wc.grpcClient.CreateWhiteboard(ctx, converterwhiteboard.ToProtoCreateRequest(req))
 
+	// Error handling
 	if err != nil {
+		st, ok := status.FromError(err)
+		if ok {
+			switch st.Code() {
+			case codes.Internal:
+				return nil, api.NewInternalError()
+			}
+		}
 		logger.Error("Failed to create whiteboard", slogext.Err(err))
 		return nil, fmt.Errorf("failed to create whiteboard: %w", err)
 	}
@@ -59,8 +70,16 @@ func (wc *WhiteboardClient) GetWhiteboard(ctx context.Context, id uuid.UUID) (*r
 
 	result, err := wc.grpcClient.GetWhiteboard(ctx, &whiteboardv1.GetWhiteboardRequest{Id: id.String()})
 
+	// Error handling
 	if err != nil {
-		logger.Error("Failed to create whiteboard", slogext.Err(err))
+		st, ok := status.FromError(err)
+		if ok {
+			switch st.Code() {
+			case codes.NotFound:
+				return nil, api.NewNotFoundError("Whiteboard not found")
+			}
+		}
+		logger.Error("Failed to get whiteboard", slogext.Err(err))
 		return nil, fmt.Errorf("failed to get whiteboard: %w", err)
 	}
 
@@ -73,7 +92,15 @@ func (wc *WhiteboardClient) UpdateWhiteboard(ctx context.Context, id uuid.UUID, 
 
 	result, err := wc.grpcClient.UpdateWhiteboard(ctx, converterwhiteboard.ToProtoUpdateRequest(id, req))
 
+	// Error handling
 	if err != nil {
+		st, ok := status.FromError(err)
+		if ok {
+			switch st.Code() {
+			case codes.NotFound:
+				return nil, api.NewNotFoundError("Whiteboard not found")
+			}
+		}
 		logger.Error("Failed to update whiteboard", slogext.Err(err))
 		return nil, fmt.Errorf("failed to update whiteboard: %w", err)
 	}
@@ -88,6 +115,13 @@ func (wc *WhiteboardClient) DeleteWhiteboard(ctx context.Context, id uuid.UUID) 
 	_, err := wc.grpcClient.DeleteWhiteboard(ctx, &whiteboardv1.DeleteWhiteboardRequest{Id: id.String()})
 
 	if err != nil {
+		st, ok := status.FromError(err)
+		if ok {
+			switch st.Code() {
+			case codes.NotFound:
+				return api.NewNotFoundError("Whiteboard not found")
+			}
+		}
 		logger.Error("Failed to delete whiteboard", slogext.Err(err))
 		return fmt.Errorf("failed to delete whiteboard: %w", err)
 	}

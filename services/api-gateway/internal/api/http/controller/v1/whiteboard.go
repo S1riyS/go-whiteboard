@@ -40,21 +40,15 @@ func (c *whiteboardController) Create(ctx *gin.Context) {
 	var req request.CreateWhiteboardRequest
 	err := ctx.Bind(&req)
 	if err != nil {
-		logger.Warn("Failed to bind request", slogext.Err(err))
-		// TODO: set error like api.BadRequest and move error formatting to middleware
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "failed to bind request",
-		})
+		logger.Debug("Failed to bind request", slogext.Err(err))
+		api.NewUnprocessableEntityError().WriteToContext(ctx)
 		return
 	}
 
 	response, err := c.client.CreateWhiteboard(ctx.Request.Context(), &req)
 	if err != nil {
 		logger.Error("Failed to create whiteboard", slog.Any("response", response), slogext.Err(err))
-		// TODO: set error like api.BadRequest and move error formatting to middleware
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "Failed to create whiteboard",
-		})
+		api.WriteErrorToContext(ctx, err)
 		return
 	}
 
@@ -76,10 +70,7 @@ func (c *whiteboardController) GetOne(ctx *gin.Context) {
 	response, err := c.client.GetWhiteboard(ctx.Request.Context(), id)
 	if err != nil {
 		logger.Error("Failed to get whiteboard", slog.String("id", ctx.Param("id")), slogext.Err(err))
-		// TODO: set error like api.BadRequest and move error formatting to middleware
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "Failed to get whiteboard",
-		})
+		api.WriteErrorToContext(ctx, err)
 		return
 	}
 
@@ -102,21 +93,20 @@ func (c *whiteboardController) Update(ctx *gin.Context) {
 	var req request.UpdateWhiteboardRequest
 	err = ctx.Bind(&req)
 	if err != nil {
-		logger.Warn("Failed to bind request", slogext.Err(err))
-		// TODO: set error like api.BadRequest and move error formatting to middleware
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "failed to bind request",
-		})
+		logger.Warn("Failed to bind request", slog.Any("request", req), slogext.Err(err))
+		api.NewUnprocessableEntityError().WriteToContext(ctx)
 		return
 	}
 
 	response, err := c.client.UpdateWhiteboard(ctx.Request.Context(), id, &req)
 	if err != nil {
-		logger.Error("Failed to update whiteboard", slog.Any("response", response), slogext.Err(err))
-		// TODO: set error like api.BadRequest and move error formatting to middleware
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "Failed to update whiteboard",
-		})
+		logger.Error("Failed to update whiteboard",
+			slog.String("whiteboard_id", id.String()),
+			slog.Any("request", req),
+			slog.Any("response", response),
+			slogext.Err(err),
+		)
+		api.WriteErrorToContext(ctx, err)
 		return
 	}
 
@@ -138,10 +128,7 @@ func (c *whiteboardController) Delete(ctx *gin.Context) {
 	err = c.client.DeleteWhiteboard(ctx.Request.Context(), id)
 	if err != nil {
 		logger.Error("Failed to delete whiteboard", slog.String("id", ctx.Param("id")), slogext.Err(err))
-		// TODO: set error like api.BadRequest and move error formatting to middleware
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "Failed to delete whiteboard",
-		})
+		api.WriteErrorToContext(ctx, err)
 		return
 	}
 
