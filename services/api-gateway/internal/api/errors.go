@@ -83,8 +83,5 @@ func (e *Error) WriteToContext(ctx *gin.Context) {
 }
 
 func WriteErrorToContext(ctx *gin.Context, err error) {
-	ginError := ctx.Error(err)
-	if ginError != nil {
-		ctx.AbortWithStatusJSON(http.StatusInternalServerError, NewInternalError())
-	}
+	ctx.Error(err) //nolint:errcheck // It's ok here. Returns passed error
 }
