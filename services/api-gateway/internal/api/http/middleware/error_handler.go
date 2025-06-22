@@ -1,61 +1,42 @@
 package middlewares
 
-// TODO: rewrite to Gin
+import (
+	"errors"
+	"net/http"
+	"time"
 
-// import (
-// 	"errors"
-// 	"time"
+	"github.com/S1riyS/go-whiteboard/api-gateway/internal/api"
+	"github.com/S1riyS/go-whiteboard/api-gateway/internal/dto/response"
+	"github.com/gin-gonic/gin"
+)
 
-// 	"github.com/S1riyS/poker-monte-carlo/internal/apperrors"
-// 	"github.com/S1riyS/poker-monte-carlo/internal/dto"
-// 	"github.com/gofiber/fiber/v2"
-// )
+func ErrorHandler() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		// Process the request
+		c.Next()
 
-// var internalError = apperrors.NewInternalError()
+		// Check if there's an error in the context
+		if len(c.Errors) > 0 {
+			err := c.Errors.Last().Err
 
-// func ErrorHandler(ctx *fiber.Ctx) error {
-// 	err := ctx.Next()
+			// Check if it's an ApiError
+			var apiErr *api.Error
+			if errors.As(err, &apiErr) {
+				c.JSON(apiErr.Code, apiErrorToResponse(apiErr))
+				return
+			}
 
-// 	// Handle application API errors
-// 	var apiErr *apperrors.ApiError
-// 	if errors.As(err, &apiErr) {
-// 		return ctx.Status(apiErr.Code).JSON(apiErrorToResponse(apiErr))
-// 	}
+			// Internal error by default
+			c.JSON(http.StatusInternalServerError, apiErrorToResponse(api.NewInternalError()))
+			return
+		}
+	}
+}
 
-// 	// Handle validation errors
-// 	var validationErr *apperrors.ValidationError
-// 	if errors.As(err, &validationErr) {
-// 		return ctx.Status(validationErr.Code).JSON(validationErrorToResponse(validationErr))
-// 	}
-
-// 	if err != nil {
-// 		return ctx.Status(internalError.Code).JSON(apiErrorToResponse(internalError))
-// 	}
-
-// 	return nil
-// }
-
-// func apiErrorToResponse(err *apperrors.ApiError) dto.ApiErrorResponse {
-// 	return dto.ApiErrorResponse{
-// 		Timestamp: time.Now(),
-// 		Title:     err.Title,
-// 		Details:   err.Details,
-// 	}
-// }
-
-// func validationErrorToResponse(err *apperrors.ValidationError) dto.ValidationErrorResponse {
-// 	// Convert fields
-// 	responseValidationFieldErrors := make([]dto.ValidationFieldError, len(err.Fields))
-// 	for i, field := range err.Fields {
-// 		responseValidationFieldErrors[i] = dto.ValidationFieldError{
-// 			Name:    field.Name,
-// 			Message: field.Message,
-// 		}
-// 	}
-// 	// Create validation error response
-// 	return dto.ValidationErrorResponse{
-// 		Timestamp: time.Now(),
-// 		Title:     err.Title,
-// 		Fields:    responseValidationFieldErrors,
-// 	}
-// }
+func apiErrorToResponse(err *api.Error) response.APIErrorResponse {
+	return response.APIErrorResponse{
+		Title:     err.Title,
+		Details:   err.Details,
+		Timestamp: time.Now().UTC(),
+	}
+}

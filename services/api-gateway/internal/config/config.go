@@ -8,7 +8,7 @@ import (
 
 type Config struct {
 	Env        EnvType                `yaml:"env" env-default:"local"`
-	HTTP       HttpConfig             `yaml:"http_server"`
+	HTTP       HTTPConfig             `yaml:"http_server"`
 	Whiteboard WhiteboardClientConfig `yaml:"whiteboard_client"`
 }
 

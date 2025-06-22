@@ -34,7 +34,7 @@ func main() {
 
 	// Init and run app
 	ctx := context.Background()
-	application := app.New(ctx, logger, cfg)
+	application := app.New(ctx, logger, *cfg)
 	go application.MustRun() // Run app in separate goroutine
 
 	// Graceful shutdown

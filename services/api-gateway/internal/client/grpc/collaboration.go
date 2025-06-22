@@ -1,0 +1,3 @@
+package clientgrpc
+
+func NewCollaborationClient() {}
