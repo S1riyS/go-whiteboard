@@ -52,6 +52,7 @@ func (wc *WhiteboardClient) CreateWhiteboard(ctx context.Context, req *request.C
 	if err != nil {
 		st, ok := status.FromError(err)
 		if ok {
+			//nolint:exhaustive // Later list of cases might be extended
 			switch st.Code() {
 			case codes.Internal:
 				return nil, api.NewInternalError()
@@ -74,6 +75,7 @@ func (wc *WhiteboardClient) GetWhiteboard(ctx context.Context, id uuid.UUID) (*r
 	if err != nil {
 		st, ok := status.FromError(err)
 		if ok {
+			//nolint:exhaustive // Later list of cases might be extended
 			switch st.Code() {
 			case codes.NotFound:
 				return nil, api.NewNotFoundError("Whiteboard not found")
@@ -95,6 +97,7 @@ func (wc *WhiteboardClient) UpdateWhiteboard(ctx context.Context, id uuid.UUID, 
 	// Error handling
 	if err != nil {
 		st, ok := status.FromError(err)
+		//nolint:exhaustive // Later list of cases might be extended
 		if ok {
 			switch st.Code() {
 			case codes.NotFound:
@@ -117,6 +120,7 @@ func (wc *WhiteboardClient) DeleteWhiteboard(ctx context.Context, id uuid.UUID) 
 	if err != nil {
 		st, ok := status.FromError(err)
 		if ok {
+			//nolint:exhaustive // Later list of cases might be extended
 			switch st.Code() {
 			case codes.NotFound:
 				return api.NewNotFoundError("Whiteboard not found")

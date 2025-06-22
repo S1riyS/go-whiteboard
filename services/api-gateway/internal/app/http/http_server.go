@@ -3,7 +3,6 @@ package httpServer
 import (
 	"fmt"
 	"log/slog"
-	"net/http"
 	"time"
 
 	v1 "github.com/S1riyS/go-whiteboard/api-gateway/internal/api/http/controller/v1"
@@ -19,12 +18,12 @@ type Server struct {
 	logger *slog.Logger
 	config config.Config
 
-	ginInstance *gin.Engine  // Gin engine that runs on `httpSrv`
-	httpSrv     *http.Server // Underlying HTTP server
+	ginInstance *gin.Engine // Gin engine that runs on `httpSrv`
+	// httpSrv     *http.Server // Underlying HTTP server
 }
 
 func New(logger *slog.Logger, config config.Config) *Server {
-	const mark = "httpServer.New"
+	// const mark = "httpServer.New"
 
 	server := &Server{
 		logger: logger,
@@ -62,7 +61,7 @@ func (hs *Server) Stop() {
 }
 
 func (hs *Server) initGin() {
-	const mark = "httpServer.setupGinEngine"
+	// const mark = "httpServer.setupGinEngine"
 
 	hs.ginInstance = gin.New()
 
@@ -73,7 +72,7 @@ func (hs *Server) initGin() {
 		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
-		MaxAge:           12 * time.Hour,
+		MaxAge:           12 * time.Hour, //nolint:mnd // Later will be retrieved from config (probably)
 	}))
 
 	// Middlewares
@@ -85,7 +84,7 @@ func (hs *Server) initGin() {
 }
 
 func (hs *Server) initControllers() {
-	const mark = "httpServer.initControllers"
+	// const mark = "httpServer.initControllers"
 
 	// API
 	apiGroup := hs.ginInstance.Group("/api")

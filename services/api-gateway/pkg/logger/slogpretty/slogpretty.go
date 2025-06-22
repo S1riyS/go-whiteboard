@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"io"
-	stdLog "log"
+	stdLog "log" //nolint:depguard
 	"log/slog"
 
 	"github.com/fatih/color"

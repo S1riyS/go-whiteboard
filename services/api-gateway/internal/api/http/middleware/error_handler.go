@@ -20,7 +20,7 @@ func ErrorHandler() gin.HandlerFunc {
 			err := c.Errors.Last().Err
 
 			// Check if it's an ApiError
-			var apiErr *api.ApiError
+			var apiErr *api.Error
 			if errors.As(err, &apiErr) {
 				c.JSON(apiErr.Code, apiErrorToResponse(apiErr))
 				return
@@ -33,8 +33,8 @@ func ErrorHandler() gin.HandlerFunc {
 	}
 }
 
-func apiErrorToResponse(err *api.ApiError) response.ApiErrorResponse {
-	return response.ApiErrorResponse{
+func apiErrorToResponse(err *api.Error) response.APIErrorResponse {
+	return response.APIErrorResponse{
 		Title:     err.Title,
 		Details:   err.Details,
 		Timestamp: time.Now().UTC(),

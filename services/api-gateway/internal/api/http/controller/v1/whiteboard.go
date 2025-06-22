@@ -20,19 +20,19 @@ type WhiteboardClient interface {
 	DeleteWhiteboard(ctx context.Context, id uuid.UUID) error
 }
 
-type whiteboardController struct {
+type WhiteboardController struct {
 	logger *slog.Logger
 	client WhiteboardClient
 }
 
-func NewWhiteboardController(logger *slog.Logger, client WhiteboardClient) *whiteboardController {
-	return &whiteboardController{
+func NewWhiteboardController(logger *slog.Logger, client WhiteboardClient) *WhiteboardController {
+	return &WhiteboardController{
 		logger: logger,
 		client: client,
 	}
 }
 
-func (c *whiteboardController) Create(ctx *gin.Context) {
+func (c *WhiteboardController) Create(ctx *gin.Context) {
 	const mark = "whiteboardController.Create"
 	logger := c.logger.With(slog.String("mark", mark))
 
@@ -55,7 +55,7 @@ func (c *whiteboardController) Create(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, response)
 }
 
-func (c *whiteboardController) GetOne(ctx *gin.Context) {
+func (c *WhiteboardController) GetOne(ctx *gin.Context) {
 	const mark = "whiteboardController.GetOne"
 	logger := c.logger.With(slog.String("mark", mark))
 
@@ -77,7 +77,7 @@ func (c *whiteboardController) GetOne(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, response)
 }
 
-func (c *whiteboardController) Update(ctx *gin.Context) {
+func (c *WhiteboardController) Update(ctx *gin.Context) {
 	const mark = "whiteboardController.Update"
 	logger := c.logger.With(slog.String("mark", mark))
 
@@ -113,7 +113,7 @@ func (c *whiteboardController) Update(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, response)
 }
 
-func (c *whiteboardController) Delete(ctx *gin.Context) {
+func (c *WhiteboardController) Delete(ctx *gin.Context) {
 	const mark = "whiteboardController.Delete"
 	logger := c.logger.With(slog.String("mark", mark))
 

@@ -16,8 +16,8 @@ type App struct {
 	httpServer *httpServer.Server
 }
 
-func New(ctx context.Context, logger *slog.Logger, cfg config.Config) *App {
-	const mark = "app.New"
+func New(_ context.Context, logger *slog.Logger, cfg config.Config) *App {
+	// const mark = "app.New"
 
 	app := &App{
 		logger:     logger,
@@ -42,14 +42,11 @@ func (a *App) MustRun() {
 }
 
 func (a *App) Stop() {
-	const mark = "app.Stop"
-
 	a.httpServer.Stop()
 }
 
-func (a *App) initValidator() error {
+func (a *App) initValidator() {
 	const mark = "app.initValidator"
 
 	a.logger.Warn("Validator is NOT initialized", slog.String("mark", mark))
-	return nil
 }

@@ -9,14 +9,14 @@ import (
 )
 
 func FromProtoWhiteboardResponse(proto *whiteboardv1.Whiteboard) (*response.WhiteboardResponse, error) {
-	uuid, err := uuid.Parse(proto.Id)
+	uuid, err := uuid.Parse(proto.GetId())
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse uuid: %w", err)
 	}
 
 	return &response.WhiteboardResponse{
 		ID:          uuid,
-		Title:       proto.Title,
-		Description: proto.Description,
+		Title:       proto.GetTitle(),
+		Description: proto.GetDescription(),
 	}, nil
 }
