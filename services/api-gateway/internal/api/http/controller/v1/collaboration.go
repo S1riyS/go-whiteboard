@@ -185,5 +185,5 @@ func (c *CollaborationWSController) handleDraw(ctx *gin.Context, ws *websocket.C
 	}
 
 	// Broadcast new drawing
-	c.hub.Broadcast(whiteboardID, resp)
+	go c.hub.Broadcast(whiteboardID, resp)
 }
