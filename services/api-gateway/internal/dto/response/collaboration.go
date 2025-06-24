@@ -1,6 +1,9 @@
 package response
 
-type CollaborationSessionResponse struct {
-	SessionID string `json:"session_id"`
-	WSURL     string `json:"ws_url"` // e.g., "ws://localhost/ws?token=..."
+import "github.com/S1riyS/go-whiteboard/api-gateway/internal/dto/model"
+
+type DrawResponse struct {
+	ID   string            `json:"id"`
+	Type model.ElementType `json:"type"`
+	Data any               `json:"data"`
 }

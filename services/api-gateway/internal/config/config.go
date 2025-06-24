@@ -7,9 +7,10 @@ import (
 )
 
 type Config struct {
-	Env        EnvType                `yaml:"env" env-default:"local"`
-	HTTP       HTTPConfig             `yaml:"http_server"`
-	Whiteboard WhiteboardClientConfig `yaml:"whiteboard_client"`
+	Env           EnvType                   `yaml:"env" env-default:"local"`
+	HTTP          HTTPConfig                `yaml:"http_server"`
+	Whiteboard    WhiteboardClientConfig    `yaml:"whiteboard_client"`
+	Collaboration CollaborationClientConfig `yaml:"collaboration_client"`
 }
 
 func MustLoad(configPath string) *Config {

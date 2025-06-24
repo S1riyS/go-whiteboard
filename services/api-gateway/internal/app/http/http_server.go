@@ -6,7 +6,7 @@ import (
 	"time"
 
 	v1 "github.com/S1riyS/go-whiteboard/api-gateway/internal/api/http/controller/v1"
-	middlewares "github.com/S1riyS/go-whiteboard/api-gateway/internal/api/http/middleware"
+	"github.com/S1riyS/go-whiteboard/api-gateway/internal/api/http/middleware"
 	clientgrpc "github.com/S1riyS/go-whiteboard/api-gateway/internal/client/grpc"
 	"github.com/S1riyS/go-whiteboard/api-gateway/internal/config"
 	"github.com/S1riyS/go-whiteboard/api-gateway/pkg/logger/slogext"
@@ -22,7 +22,7 @@ type Server struct {
 	// httpSrv     *http.Server // Underlying HTTP server
 }
 
-func New(logger *slog.Logger, config config.Config) *Server {
+func MustNew(logger *slog.Logger, config config.Config) *Server {
 	// const mark = "httpServer.New"
 
 	server := &Server{
@@ -31,7 +31,7 @@ func New(logger *slog.Logger, config config.Config) *Server {
 	}
 
 	server.initGin()
-	server.initControllers()
+	server.mustInitControllers()
 
 	return server
 }
@@ -78,12 +78,12 @@ func (hs *Server) initGin() {
 	// Middlewares
 	hs.ginInstance.Use(
 		gin.Recovery(),
-		middlewares.ErrorHandler(),
+		middleware.ErrorHandler(),
 		gin.Logger(),
 	)
 }
 
-func (hs *Server) initControllers() {
+func (hs *Server) mustInitControllers() {
 	// const mark = "httpServer.initControllers"
 
 	// API
@@ -95,9 +95,19 @@ func (hs *Server) initControllers() {
 	whiteboardClient := clientgrpc.MustNewWhiteboardClient(hs.logger, hs.config.Whiteboard)
 	whiteboardController := v1.NewWhiteboardController(hs.logger, whiteboardClient)
 	{
+
 		whiteboardGroup.POST("/", whiteboardController.Create)
 		whiteboardGroup.GET("/:id", whiteboardController.GetOne)
 		whiteboardGroup.PUT("/:id", whiteboardController.Update)
 		whiteboardGroup.DELETE("/:id", whiteboardController.Delete)
+	}
+
+	// Collaboration
+	collaborationGroup := v1Group.Group("/collaboration")
+	collaborationWSHub := v1.NewWSHub()
+	collaborationClient := clientgrpc.MustNewCollaborationClient(hs.logger, hs.config.Collaboration)
+	collaborationController := v1.NewCollaborationWSController(hs.logger, collaborationClient, collaborationWSHub)
+	{
+		collaborationGroup.GET("/:whiteboardID/ws", collaborationController.HandleRequest)
 	}
 }

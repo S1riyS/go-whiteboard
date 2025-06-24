@@ -5,7 +5,10 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/gorilla/websocket"
 )
+
+// TODO: Get rid of dependencies: gin, websocket (maybe)
 
 const (
 	TitleInternalError       = "Internal error"
@@ -80,6 +83,10 @@ func (e *Error) Error() string {
 // WriteToContext writes the error to the gin context.
 func (e *Error) WriteToContext(ctx *gin.Context) {
 	WriteErrorToContext(ctx, e)
+}
+
+func (e *Error) WriteToWebsocket(ws *websocket.Conn) {
+	ws.WriteJSON(e) //nolint:errcheck // We need to return something anyway. Panic is handled by middleware
 }
 
 func WriteErrorToContext(ctx *gin.Context, err error) {

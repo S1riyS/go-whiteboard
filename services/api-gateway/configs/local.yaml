@@ -8,3 +8,7 @@ http_server:
 whiteboard_client:
   host: "localhost"
   port: 50051
+
+collaboration_client:
+  host: "localhost"
+  port: 50052

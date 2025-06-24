@@ -1,4 +1,4 @@
-package middlewares
+package middleware
 
 // TODO: rewrite to Gin
 

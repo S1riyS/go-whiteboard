@@ -22,7 +22,7 @@ func New(_ context.Context, logger *slog.Logger, cfg config.Config) *App {
 	app := &App{
 		logger:     logger,
 		config:     cfg,
-		httpServer: httpServer.New(logger, cfg),
+		httpServer: httpServer.MustNew(logger, cfg),
 	}
 
 	app.initValidator()
