@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  api-gateway:
+    build: ./services/api-gateway
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./services/api-gateway/configs:/app/configs:ro
+    restart: unless-stopped
+    networks:
+      - app-network
+  
+  whiteboard-service:
+    build: ./services/whiteboard-service
+    container_name: whiteboard-service
+    volumes:
+      - ./services/whiteboard-service/configs:/app/configs:ro
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  collaboration-service:
+    build: ./services/collaboration-service
+    container_name: collaboration-service
+    volumes:
+      - ./services/collaboration-service/configs:/app/configs:ro
+    restart: unless-stopped
+    networks:
+      - app-network
+
+networks:
+  app-network:
