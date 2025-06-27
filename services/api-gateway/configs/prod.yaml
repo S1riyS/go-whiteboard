@@ -5,6 +5,6 @@ http_server:
   timeout: 10h
   allowed_origins: ["http://frontend:3000"]
 
-whiteboard_server:
+whiteboard_client:
   host: "localhost"
   port: 50051
