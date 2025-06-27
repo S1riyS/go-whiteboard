@@ -1,0 +1,34 @@
+# General ignores
+**/.git
+**/.gitignore
+**/.DS_Store
+**/Thumbs.db
+**/*.md
+**/Taskfile.yaml
+**/tmp/
+**/bin/                # Ignore binaries (they'll be rebuilt)
+**/air                 # Dev tool
+
+# Development artifacts
+**/vendor/
+**/go.sum              # We'll use go.mod for dependency resolution
+**/*_test.go
+**/testdata/
+
+# Editor/IDE files
+**/.vscode/
+**/.idea/
+**/*.swp
+**/*.swo
+
+# Service-specific ignores
+services/**/bin/       # All service binaries
+services/**/tmp/       # Temporary files
+
+# Documentation assets
+docs/assets/           # Large files not needed for runtime
+
+# KEEP these critical paths:
+!services/**/configs/  # Need config files
+!shared/proto/         # Need protobuf definitions
+!shared/gen/go/        # Need generated code
